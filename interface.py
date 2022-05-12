@@ -67,7 +67,7 @@ if selected==nav_list[1]:
     # Set a select menu
     country_list = df["geo"].unique()
     options = st.multiselect(
-     'What are your favorite colors',
+     'Select a country',
      country_list,
      country_list[0])
     ######################################################
@@ -81,7 +81,7 @@ if selected==nav_list[2]:
     # Set a select menu
     country_list = df["geo"].unique()
     options = st.multiselect(
-     'What are your favorite colors',
+     'Select a country',
      country_list,
      country_list[0])
     ######################################################
