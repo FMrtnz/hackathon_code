@@ -64,16 +64,16 @@ if selected==nav_list[0]:
 
 if selected==nav_list[1]:
     st.markdown(f'## {nav_list[1]}')
-    # Set a select menu
-    country_list = df["geo"].unique()
-    options = st.multiselect(
-     'Select a country',
-     country_list,
-     country_list[0])
+    # # Set a select menu
+    # country_list = df["geo"].unique()
+    # options = st.multiselect(
+     # 'Select a country',
+     # country_list,
+     # country_list[0])
     ######################################################
     ######################################################
     # FRANCOIS
-    
+
     link = "./data/env_waspac_linear.csv"
     df = pd.read_csv(link)
     # Importing Generated waste and Recovered waste data from 2019 only (excluding geo=EU27_2020 data)
