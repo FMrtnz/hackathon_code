@@ -2,6 +2,7 @@
 import pandas as pd
 import streamlit as st
 from europe_map import create_a_map_europe
+import plotly.express as px
 
 ## Code for packaging type
 # Packaging [W1501] # Paper and cardboard packaging [W150101] Plastic packaging [W150102] Wooden packaging [W150103] Metallic packaging [W150104] Aluminium packaging [W15010401] Steel packaging [W15010402] Glass packaging [W150107] Other packaging [W150199]
