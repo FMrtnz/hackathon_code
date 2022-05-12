@@ -2,16 +2,26 @@
 import pandas as pd
 import streamlit as st
 from europe_map import create_a_map_europe
-# import seaborn as sn
-# from matplotlib import pyplot as plt
-# import plotly.express as px
-# from sklearn.preprocessing import StandardScaler
-# from sklearn.neighbors import NearestNeighbors
-# from unidecode import unidecode
-# from sklearn.preprocessing import MultiLabelBinarizer
+
+## Code for packaging type
+# Packaging [W1501] # Paper and cardboard packaging [W150101] Plastic packaging [W150102] Wooden packaging [W150103] Metallic packaging [W150104] Aluminium packaging [W15010401] Steel packaging [W15010402] Glass packaging [W150107] Other packaging [W150199]
+
+# Wasting operator (wst_oper) Waste generated [GEN] Recovery [RCV] Recovery - energy recovery from packaging waste [RCV_E_PAC] Recovery - other [RCV_OTH] Recycling [RCY] Recycling in the Member State [RCY_NAT] Recycling in other Member States of the EU [RCY_EU_FOR] Recycling outside the EU [RCY_NEU] Repair [RPR] rating per country [RATING]
+# Unit code RT = RATE T = TONNE PC = Percentage KG_HAB = Kilograms per capita
+
+# DATABASE Packaging waste by waste management operations
+link="./data/env_waspac_linear.csv"
+df1=pd.read_csv(link)
+df1.head()
+df1
+# Rating database
+link2 = "./data/env_waspacr_linear.csv"
+df_waspacr = pd.read_csv(link2)
+df_waspacr["waste"].value_counts()
+# Combine TABLE
+df=pd.concat([df,df_waspacr])
 
 
-#df = pd.read_csv("./data/rating_movies_audience_publisher")
 
 st.markdown('<H1 style="color:#00cc00;text-align:center;" >Green app</H1>', unsafe_allow_html=True)
 
@@ -20,6 +30,8 @@ st.markdown('<style>.row-widget.stButton{display: flex;justify-content: center;}
 
 nav_list = [
             "Europe map",
+            "Waste vs recovery",
+            "Different types of recovery"
             ]
 
 us_title = "About us"
@@ -52,6 +64,27 @@ if selected==nav_list[0]:
     st.plotly_chart(create_a_map_europe(values[index]["sel"], 'Tons'))
     st.write(f'{values[index]["label"]} (kg/hab)')
     st.plotly_chart(create_a_map_europe(values[index]["sel"], 'kg/hab', "KG_HAB"))
+
+if selected==nav_list[1]:
+    st.markdown(f'## {nav_list[1]}')
+    ######################################################
+    ######################################################
+    # FRANCOIS
+    ######################################################
+    ######################################################
+
+if selected==nav_list[2]:
+    st.markdown(f'## {nav_list[2]}')`
+    country_list =
+    options = st.multiselect(
+     'What are your favorite colors',
+     ['Green', 'Yellow', 'Red', 'Blue'],
+     ['Yellow', 'Red'])
+    ######################################################
+    ######################################################
+    # JOAO
+    ######################################################
+    ######################################################
 
 if selected==us_title:
     st.markdown(f'# {us_title}')
