@@ -46,23 +46,26 @@ def create_a_map_europe(select_operator = "GEN", label="Waste generate (tons)", 
 
     # CREATE A PIVOT TABLE gpe by country and type waste operator generate in last year in tonnes
     gen_waste_per_geo = pd.pivot_table(\
-                     data=df[(df["unit"]==unit)&(df["TIME_PERIOD"]==df["TIME_PERIOD"].max()) & (df['wst_oper'] == select_operator)],
-                     index=["geo"],
+                     data=df[(df["unit"]==unit)& (df['wst_oper'] == select_operator)],
+                     index=["geo","TIME_PERIOD"],
                      values=["OBS_VALUE"]
                      ).reset_index()
 
     # I connect the country trought the value wb_a2
-    gen_waste_per_geo.columns = ["wb_a2", "OBS_VALUE"]
+    gen_waste_per_geo.columns = ["wb_a2", "TIME_PERIOD", "OBS_VALUE"]
 
     value_max = int(gen_waste_per_geo["OBS_VALUE"].quantile(.9))
 
-    fig = px.choropleth_mapbox(gen_waste_per_geo, geojson=data, locations='wb_a2',
+    fig = px.choropleth_mapbox(gen_waste_per_geo.sort_values(['TIME_PERIOD'], ascending=False), geojson=data, locations='wb_a2',
                                color='OBS_VALUE',
+                               animation_frame="TIME_PERIOD",
+                               animation_group="OBS_VALUE",
                                color_continuous_scale="Viridis",
                                range_color=(0, value_max),
                                mapbox_style="carto-positron",
-                               zoom=2, center = {"lat": 55, "lon": 0},
+                               zoom=1.7, center = {"lat": 55, "lon": 10},
                                opacity=0.5,
+                               height=500,
                                labels={'OBS_VALUE':f'{label}'}
                               )
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})

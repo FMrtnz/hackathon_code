@@ -12,14 +12,11 @@ from europe_map import create_a_map_europe
 # DATABASE Packaging waste by waste management operations
 link="./data/env_waspac_linear.csv"
 df1=pd.read_csv(link)
-df1.head()
-df1
 # Rating database
 link2 = "./data/env_waspacr_linear.csv"
 df_waspacr = pd.read_csv(link2)
-df_waspacr["waste"].value_counts()
 # Combine TABLE
-df=pd.concat([df,df_waspacr])
+df=pd.concat([df1,df_waspacr])
 
 
 
@@ -67,6 +64,12 @@ if selected==nav_list[0]:
 
 if selected==nav_list[1]:
     st.markdown(f'## {nav_list[1]}')
+    # Set a select menu
+    country_list = df["geo"].unique()
+    options = st.multiselect(
+     'What are your favorite colors',
+     country_list,
+     country_list[0])
     ######################################################
     ######################################################
     # FRANCOIS
@@ -74,12 +77,13 @@ if selected==nav_list[1]:
     ######################################################
 
 if selected==nav_list[2]:
-    st.markdown(f'## {nav_list[2]}')`
-    country_list =
+    st.markdown(f'## {nav_list[2]}')
+    # Set a select menu
+    country_list = df["geo"].unique()
     options = st.multiselect(
      'What are your favorite colors',
-     ['Green', 'Yellow', 'Red', 'Blue'],
-     ['Yellow', 'Red'])
+     country_list,
+     country_list[0])
     ######################################################
     ######################################################
     # JOAO
