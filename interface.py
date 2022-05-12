@@ -1,6 +1,7 @@
 # Import libraries
 import pandas as pd
 import streamlit as st
+from europe_map import create_a_map_europe
 # import seaborn as sn
 # from matplotlib import pyplot as plt
 # import plotly.express as px
@@ -18,7 +19,7 @@ st.markdown('<style>.row-widget.stButton{display: flex;justify-content: center;}
 
 
 nav_list = [
-            "intro",
+            "Europe map",
             ]
 
 us_title = "About us"
@@ -31,7 +32,8 @@ with st.sidebar:
         selected = us_title
 
 if selected==nav_list[0]:
-    st.write("Test")
+    st.write("Europe map")
+    st.plotly_chart(create_a_map_europe())
 
 if selected==us_title:
     st.markdown(f'# {us_title}')
