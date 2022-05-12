@@ -32,8 +32,26 @@ with st.sidebar:
         selected = us_title
 
 if selected==nav_list[0]:
-    st.write("Europe map")
-    st.plotly_chart(create_a_map_europe())
+    st.markdown(f'## {nav_list[0]}')
+    # select one value Waste generated [GEN] & Recovery [RCV]
+    op = ["Waste generate","Recovery"]
+    # 2 maps with 2 metrics T = TON & KG_HAB = Kilograms per capita
+    sel_country = st.selectbox(
+         'Display maps by :',
+         options=op,
+         key=[0, 1]
+         )
+    values=[
+         {"sel": "GEN", "label": "Waste generate"},
+         {"sel": "RCV", "label": "Recovery"},
+    ]
+    index = 0
+    if sel_country == op[1]:
+        index = 1
+    st.write(f'{values[index]["label"]} (Tons)')
+    st.plotly_chart(create_a_map_europe(values[index]["sel"], 'Tons'))
+    st.write(f'{values[index]["label"]} (kg/hab)')
+    st.plotly_chart(create_a_map_europe(values[index]["sel"], 'kg/hab', "KG_HAB"))
 
 if selected==us_title:
     st.markdown(f'# {us_title}')

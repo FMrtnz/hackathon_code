@@ -28,8 +28,8 @@ import plotly.express as px
 # Unit code
 # RT = RATE
 # T = TONNE
-# PC = Percentage
 # KG_HAB = Kilograms per capita
+# PC = Percentage
 
 link="./data/env_waspac_linear.csv"
 df=pd.read_csv(link)
