@@ -201,11 +201,17 @@ if selected==nav_list[3]:
          'Select type of packaging',
          type_list)
 
-    list_op = df["wst_oper"].unique()
+
+    if unit_selected!="RT":
+        list_op = df["wst_oper"].unique()
+    else:
+        list_op=["RATING"]
+
     sel_op = st.multiselect(
      'Select Operator',
      list_op,
      list_op)
+
 
     st.plotly_chart(recyclage_per_country(df,sel_country,unit_selected, sel_op, type_selected))
 

@@ -37,34 +37,24 @@ df=pd.read_csv(link)
 def recyclage_per_country(data=df, country="PT", unit="T", select_operator = ["GEN"], type = df["waste"].unique()[0]):
 
     gen_waste_per_geo = pd.pivot_table(\
-                     data=data[(data["geo"]==country)& \
-                     data["TIME_PERIOD"]==data["TIME_PERIOD"].max() &\
-                     (data["unit"]==unit)\
-                     & (data['waste'] == type)
-                     ],
-                     index=["wst_oper"],
+                     data=data[data["TIME_PERIOD"]==data["TIME_PERIOD"].max()],
+                     index=["geo","waste", "wst_oper",'unit',],
                      values=["OBS_VALUE"],
-                     aggfunc="mean"
+                     aggfunc="mean",
+                     dropna=False
                      ).reset_index()
-
-    gen_waste_total = pd.pivot_table(\
-                     data=data[(data["geo"]=="eur28")& \
-                     data["TIME_PERIOD"]==data["TIME_PERIOD"].max() &\
-                     (data["unit"]==unit)\
-                     & (data['waste'] == type)
-                     ],
-                     index=["wst_oper"],
-                     values=["OBS_VALUE"],
-                     aggfunc="mean"
-                     ).reset_index()
-    cols_op = ["Waste operator", "Average"]
-    gen_waste_total.columns = cols_op
-    gen_waste_total["geo"] = "Europe"
+    cols_op = ["geo","Waste type","Waste operator", "Unit", "Average"]
     gen_waste_per_geo.columns = cols_op
-    gen_waste_per_geo["geo"] = country
-    gen_waste_per_geo = gen_waste_per_geo[gen_waste_per_geo["Waste operator"].isin(gen_waste_total["Waste operator"].unique())]
-    df_final = pd.concat([gen_waste_per_geo, gen_waste_total])
-    fig = px.bar(df_final[df_final['Waste operator'].isin(select_operator)],
+
+    #gen_waste_per_geo = gen_waste_per_geo[gen_waste_per_geo["Waste operator"].isin(gen_waste_per_geo["Waste operator"].unique())]
+    # st.dataframe(gen_waste_per_geo[(gen_waste_per_geo['Waste operator'].isin(select_operator))\
+    #  & (gen_waste_per_geo['geo'].isin([country, "EU27_2020"]))\
+    #  & (gen_waste_per_geo['Waste type'] == type)\
+    #  & (gen_waste_per_geo['Unit']==unit)])
+    fig = px.bar(gen_waste_per_geo[(gen_waste_per_geo['Waste operator'].isin(select_operator))\
+     & (gen_waste_per_geo['geo'].isin([country, "EU27_2020"]))\
+     & (gen_waste_per_geo['Waste type'] == type)\
+     & (gen_waste_per_geo['Unit']==unit)],
                    x="Waste operator",
                    y="Average",
                    #y_axis=range(0, 4000000),
