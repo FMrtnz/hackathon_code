@@ -2,6 +2,7 @@
 import pandas as pd
 import streamlit as st
 from europe_map import create_a_map_europe
+import plotly.express as px
 from recyclage import recyclage_per_country
 
 ## Code for packaging type
@@ -65,29 +66,111 @@ if selected==nav_list[0]:
 
 if selected==nav_list[1]:
     st.markdown(f'## {nav_list[1]}')
-    # Set a select menu
-    country_list = df["geo"].unique()
-    options = st.multiselect(
-     'Select a country',
-     country_list,
-     country_list[0])
+    # # Set a select menu
+    # country_list = df["geo"].unique()
+    # options = st.multiselect(
+     # 'Select a country',
+     # country_list,
+     # country_list[0])
     ######################################################
     ######################################################
     # FRANCOIS
+
+    link = "./data/env_waspac_linear.csv"
+    df = pd.read_csv(link)
+    # Importing Generated waste and Recovered waste data from 2019 only (excluding geo=EU27_2020 data)
+    df_wst_rcv_19 = df[(df['TIME_PERIOD'] == 2019) & (df['wst_oper'].isin(['GEN','RCV']) & (df['geo'] != 'EU27_2020'))][['geo','wst_oper','unit','OBS_VALUE']].copy()
+
+    # Droping a few rows that don't have values to be observed
+    df_wst_rcv_19.dropna(axis=0, subset=['OBS_VALUE'], inplace=True)
+
+    # Renaming GEN and RCV for the chart legend to be clearer
+    df_wst_rcv_19['wst_oper'].replace('GEN','Generated',inplace=True)
+    df_wst_rcv_19['wst_oper'].replace('RCV','Recovered',inplace=True)
+
+    # Generating the dataframe for the bar plot
+    df_chart = df_wst_rcv_19.groupby(['unit','geo','wst_oper']).sum()
+
+    # Defining a dictionnary linking units codes with units names
+    units_dict = {'kg per capita':'KG_HAB', 'tons':'T', 'percent':'PC'}
+
+    # Dropdown menu to select the unit
+    unit_choice = st.selectbox('Select units:', units_dict)
+
+    # Generating the bar plot in the chosen unit
+    plot = px.bar(df_chart.loc[units_dict[unit_choice]].reset_index(), x='geo', y='OBS_VALUE', color='wst_oper',barmode='group',labels={"GEN": "Generated", "RCV": "Recovered"})
+
+    # Customizing bar plot before display
+    plot.update_layout(xaxis_showgrid=False, yaxis_showgrid=False,paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',legend_title="Waste")
+    plot.update_xaxes(title="Countries")
+    plot.update_yaxes(title="Value (" + unit_choice + ")")
+
+    # Displaying the bar plot
+    st.plotly_chart(plot)
     ######################################################
     ######################################################
 
 if selected==nav_list[2]:
     st.markdown(f'## {nav_list[2]}')
     # Set a select menu
-    country_list = df["geo"].unique()
-    options = st.multiselect(
-     'Select a country',
-     country_list,
-     country_list[0])
+    #country_list = df["geo"].unique()
+    #options = st.multiselect(
+     #'Select a country',
+     #country_list,
+     #country_list[0])
     ######################################################
     ######################################################
     # JOAO
+
+
+
+    link = "./data/env_waspac_linear.csv"
+#link = 'https://raw.githubusercontent.com/FMrtnz/hackathon_code/main/data/env_waspac_linear.csv'df = pd.read_csv(link)
+
+# Importing Generated waste and Recovered waste data from 2019 only (excluding geo=EU27_2020 data)
+    rcv_19 = df[(df['TIME_PERIOD'] == 2019) & (df['wst_oper'].isin(['RCV_OTH','RCY','RCV_E_PAC']) & (df['geo'] != 'EU27_2020'))][['geo','wst_oper','unit','OBS_VALUE']].copy()
+
+# Droping a few rows that don't have values to be observed
+    rcv_19.dropna(axis=0, subset=['OBS_VALUE'], inplace=True)
+
+# Renaming GEN and RCV for the chart legend to be clearer
+    rcv_19['wst_oper'].replace('RCY','Recycled',inplace=True)
+
+    rcv_19['wst_oper'].replace('RCV_OTH','Recovery - other',inplace=True)
+
+    rcv_19['wst_oper'].replace('RCV_E_PAC','Energy recovered from packaging waste',inplace=True)
+
+
+#Generating the dataframe for the bar plot
+    df_chart = rcv_19.groupby(['unit','geo','wst_oper']).sum()
+
+#Defining a dictionnary linking units codes with units names
+#units_dict = {'kg per capita':'KG_HAB', 'tons':'T', 'percent':'PC'}
+
+#Dropdown menu to select the unit
+#unit_choice = st.selectbox('Select units:', units_dict)
+
+#Dropdown menu to select the country
+
+
+    country_choice = st.multiselect('Select countries:',options=  df_chart.loc['KG_HAB'].reset_index().geo.unique(),default= ['PT', 'FR', 'DE','IT','ES'])
+
+
+#Generating the bar plot in the chosen unit
+    df_multiselect = df_chart.loc['KG_HAB'].reset_index()
+
+
+
+    plot = px.bar(df_multiselect[df_multiselect['geo'].isin(country_choice)], x='geo', y='OBS_VALUE', color='wst_oper',barmode='group')
+
+#Customizing bar plot before display
+    plot.update_layout(xaxis_showgrid=False, yaxis_showgrid=False,paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',legend_title="Waste")
+    plot.update_xaxes(title="Countries")
+    plot.update_yaxes(title="KG PER CAPITA")
+
+#Displaying the bar plot
+    st.plotly_chart(plot)
+
     ######################################################
     ######################################################
 
