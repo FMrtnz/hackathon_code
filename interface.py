@@ -97,8 +97,18 @@ if selected==nav_list[1]:
     # Dropdown menu to select the unit
     unit_choice = st.selectbox('Select units:', units_dict)
 
+    # Finalizing dataframe for the chart
+    df_chart_selection = df_chart.loc[units_dict[unit_choice]]
+    df_chart_selection.reset_index(inplace=True)
+
+    # Defining the list of countries
+    country_list = df_chart_selection.geo.unique()
+
+    # Dropdown menu to select the countries
+    country_choice = st.multiselect('Select countries:', options=country_list, default=['PT','FR','DE','IT','ES'])
+
     # Generating the bar plot in the chosen unit
-    plot = px.bar(df_chart.loc[units_dict[unit_choice]].reset_index(), x='geo', y='OBS_VALUE', color='wst_oper',barmode='group',labels={"GEN": "Generated", "RCV": "Recovered"})
+    plot = px.bar(df_chart_selection[df_chart_selection['geo'].isin(country_choice)], x='geo', y='OBS_VALUE', color='wst_oper',barmode='group',labels={"GEN": "Generated", "RCV": "Recovered"})
 
     # Customizing bar plot before display
     plot.update_layout(xaxis_showgrid=False, yaxis_showgrid=False,paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',legend_title="Waste")
