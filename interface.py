@@ -2,6 +2,7 @@
 import pandas as pd
 import streamlit as st
 from europe_map import create_a_map_europe
+from recyclage import recyclage_per_country
 
 ## Code for packaging type
 # Packaging [W1501] # Paper and cardboard packaging [W150101] Plastic packaging [W150102] Wooden packaging [W150103] Metallic packaging [W150104] Aluminium packaging [W15010401] Steel packaging [W15010402] Glass packaging [W150107] Other packaging [W150199]
@@ -17,8 +18,7 @@ link2 = "./data/env_waspacr_linear.csv"
 df_waspacr = pd.read_csv(link2)
 # Combine TABLE
 df=pd.concat([df1,df_waspacr])
-
-
+df['wst_oper'].fillna("RATING", inplace=True)
 
 st.markdown('<H1 style="color:#00cc00;text-align:center;" >Green app</H1>', unsafe_allow_html=True)
 
@@ -28,7 +28,8 @@ st.markdown('<style>.row-widget.stButton{display: flex;justify-content: center;}
 nav_list = [
             "Europe map",
             "Waste vs recovery",
-            "Different types of recovery"
+            "Different types of recovery",
+            "Recycling per country"
             ]
 
 us_title = "About us"
@@ -89,6 +90,41 @@ if selected==nav_list[2]:
     # JOAO
     ######################################################
     ######################################################
+
+
+if selected==nav_list[3]:
+# Recycling in the Member State [RCY_NAT]
+# Recycling in other Member States of the EU [RCY_EU_FOR]
+# Recycling outside the EU [RCY_NEU]
+# Repair [RPR]
+    country_list = df["geo"].unique()
+    col1,col2,col3 = st.columns(3)
+
+    with col1:
+        sel_country = st.selectbox(
+         'Select a country',
+         country_list)
+        country_list = df["geo"].unique()
+
+    with col2:
+        unit_list = ["T", "RT", "KG_HAB"]
+        unit_selected = st.selectbox(
+         'Select unit',
+         unit_list)
+
+    with col3:
+        type_list = df["waste"].unique()
+        type_selected = st.selectbox(
+         'Select type of packaging',
+         type_list)
+
+    list_op = df["wst_oper"].unique()
+    sel_op = st.multiselect(
+     'Select Operator',
+     list_op,
+     list_op)
+
+    st.plotly_chart(recyclage_per_country(df,sel_country,unit_selected, sel_op, type_selected))
 
 if selected==us_title:
     st.markdown(f'# {us_title}')
