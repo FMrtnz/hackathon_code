@@ -21,7 +21,7 @@ df_waspacr = pd.read_csv(link2)
 df=pd.concat([df1,df_waspacr])
 df['wst_oper'].fillna("RATING", inplace=True)
 
-st.markdown('<H1 style="color:#00cc00;text-align:center;" >Green app</H1>', unsafe_allow_html=True)
+st.markdown('<H1 style="color:#00cc00;text-align:center;" >Green Phoenix</H1>', unsafe_allow_html=True)
 
 st.markdown('<style>.row-widget.stButton{display: flex;justify-content: center;}</style>', unsafe_allow_html=True)
 
