@@ -212,8 +212,50 @@ if selected==nav_list[3]:
      list_op,
      list_op)
 
+    col1,col2,col3 = st.columns(3)
+    with col1:
+        with st.expander("Type of packaging"):
+            pack = ["* W1501: Packaging",
+            "* W150101: Paper and cardboard packaging",
+            "* W150102: Plastic packaging",
+            "* W150103: Wooden packaging",
+            "* W150104: Metallic packaging",
+            "* W15010401: Aluminium packaging",
+            "* W15010402: Steel packaging",
+            "* W150107: Glass packaging",
+            "* W150199: Other packaging"]
+            for p in pack:
+                st.markdown(p)
+    with col2:
+        with st.expander("Operator"):
+            ope =[
+            "* GEN: Waste generated",
+            "* RCV: Recovery",
+            "* RCV_E_PAC: Recovery - energy recovery from packaging waste",
+            "* RCV_OTH: Recovery - other",
+            "* RCY: Recycling",
+            "* RCY_NAT: Recycling in the Member State",
+            "* RCY_EU_FOR: Recycling in other Member States of the EU",
+            "* RCY_NEU: Recycling outside the EU",
+            "* RPR: Repair",
+            "* RATING: rating per country"
+            ]
+            for o in ope:
+                st.markdown(o)
+    with col3:
+        with st.expander("Unit"):
+            units = [
+            "* RT: RATE",
+            "* T: TONS",
+            "* KG_HAB: Kilograms per capita",
+            "* PC: Percentage"
+            ]
+            for u in units:
+                st.markdown(u)
+
 
     st.plotly_chart(recyclage_per_country(df,sel_country,unit_selected, sel_op, type_selected))
+
 
 if selected==us_title:
     st.markdown(f'# {us_title}')
