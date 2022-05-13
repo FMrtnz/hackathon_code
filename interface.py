@@ -30,7 +30,7 @@ nav_list = [
             "Europe map",
             "Waste vs recovery",
             "Different types of recovery",
-            "Recycling per country"
+            "Recycling per country vs Europe Union"
             ]
 
 us_title = "About us"
